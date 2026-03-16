@@ -1,7 +1,7 @@
 {
   "name": "volcre",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "all": "powershell -NoProfile -ExecutionPolicy Bypass -File ..\\scripts\\start-all.ps1",
     "start": "expo start",
