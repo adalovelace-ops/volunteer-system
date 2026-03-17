@@ -2,8 +2,10 @@ import React, { startTransition, useCallback, useEffect, useMemo, useState } fro
 import { View, FlatList, StyleSheet, Text, TouchableOpacity, Alert, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../contexts/AuthContext';
+import { RootStackParamList } from '../navigation/StackNavigator';
 import {
   getAllProjects,
   getVolunteerByUserId,
@@ -92,6 +94,7 @@ function getStatusColor(status: Project['status']) {
 
 export default function ProjectsScreen() {
   const { user } = useAuth();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [projects, setProjects] = useState<Project[]>([]);
   const [volunteerProfile, setVolunteerProfile] = useState<Volunteer | null>(null);
   const [partnerApplications, setPartnerApplications] = useState<PartnerProjectApplication[]>([]);
@@ -448,6 +451,15 @@ export default function ProjectsScreen() {
                   />
                   <Text style={styles.status}>{item.status}</Text>
                 </View>
+                <TouchableOpacity
+                  style={styles.viewDetailsButton}
+                  onPress={() =>
+                    navigation.navigate('ProjectDetail', { projectId: item.id })
+                  }
+                >
+                  <MaterialIcons name="visibility" size={16} color="#166534" />
+                  <Text style={styles.viewDetailsText}>View Details</Text>
+                </TouchableOpacity>
                 <Text style={styles.volunteers}>
                   {item.volunteers.length}/{item.volunteersNeeded} volunteers
                 </Text>
@@ -720,5 +732,19 @@ const styles = StyleSheet.create({
   volunteers: {
     fontSize: 12,
     color: '#999',
+  },
+  viewDetailsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#ecfdf5',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  viewDetailsText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#166534',
   },
 });
