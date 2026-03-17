@@ -21,6 +21,7 @@ export default function ProjectDetailScreen({ route, navigation }: Props) {
   const [project, setProject] = useState<Project | null>(null);
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -35,6 +36,8 @@ export default function ProjectDetailScreen({ route, navigation }: Props) {
           );
           setVolunteers(resolved.filter((v): v is Volunteer => v !== null));
         }
+      } catch {
+        setError('Failed to load project details. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -54,7 +57,7 @@ export default function ProjectDetailScreen({ route, navigation }: Props) {
   if (!project) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.emptyText}>Project not found.</Text>
+        <Text style={styles.emptyText}>{error || 'Project not found.'}</Text>
       </View>
     );
   }
